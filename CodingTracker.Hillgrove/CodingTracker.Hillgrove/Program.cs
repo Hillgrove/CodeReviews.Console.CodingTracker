@@ -22,7 +22,7 @@ services.AddSingleton<IDbConnection>(_ => new SqliteConnection(connectionString)
 services.AddSingleton<ICodingSessionRepository>(sp => new CodingSessionRepository(
     sp.GetRequiredService<IDbConnection>()
 ));
-services.AddSingleton<CodingSessionController>();
+services.AddSingleton<ICodingSessionController, CodingSessionController>();
 services.AddSingleton<ConsoleMenu>();
 
 using var provider = services.BuildServiceProvider();

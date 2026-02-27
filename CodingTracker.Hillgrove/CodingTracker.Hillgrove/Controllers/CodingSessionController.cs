@@ -3,7 +3,7 @@ namespace CodingTracker.Hillgrove.Controllers;
 using CodingTracker.Hillgrove.Data;
 using CodingTracker.Hillgrove.Models;
 
-internal class CodingSessionController
+internal class CodingSessionController : ICodingSessionController
 {
     private readonly ICodingSessionRepository _repository;
 

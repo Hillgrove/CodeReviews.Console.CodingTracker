@@ -6,10 +6,10 @@ namespace CodingTracker.Hillgrove.UI.Commands;
 
 internal class ViewSessionsCommand : IMenuCommand
 {
-    private readonly CodingSessionController _controller;
+    private readonly ICodingSessionController _controller;
     public string Label => "View sessions";
 
-    internal ViewSessionsCommand(CodingSessionController controller)
+    internal ViewSessionsCommand(ICodingSessionController controller)
     {
         _controller = controller;
     }

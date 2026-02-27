@@ -6,9 +6,9 @@ using Spectre.Console;
 
 internal class ConsoleMenu
 {
-    private readonly CodingSessionController _controller;
+    private readonly ICodingSessionController _controller;
 
-    public ConsoleMenu(CodingSessionController controller)
+    public ConsoleMenu(ICodingSessionController controller)
     {
         _controller = controller;
     }

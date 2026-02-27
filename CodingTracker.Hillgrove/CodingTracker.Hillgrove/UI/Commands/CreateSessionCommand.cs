@@ -8,10 +8,10 @@ namespace CodingTracker.Hillgrove.UI.Commands;
 
 internal class CreateSessionCommand : IMenuCommand
 {
-    private readonly CodingSessionController _controller;
+    private readonly ICodingSessionController _controller;
     public string Label => "Register a new session";
 
-    internal CreateSessionCommand(CodingSessionController controller)
+    internal CreateSessionCommand(ICodingSessionController controller)
     {
         _controller = controller;
     }

@@ -7,10 +7,10 @@ namespace CodingTracker.Hillgrove.UI.Commands;
 
 internal class DeleteSessionCommand : IMenuCommand
 {
-    private readonly CodingSessionController _controller;
+    private readonly ICodingSessionController _controller;
     public string Label => "Delete a session";
 
-    internal DeleteSessionCommand(CodingSessionController controller)
+    internal DeleteSessionCommand(ICodingSessionController controller)
     {
         _controller = controller;
     }

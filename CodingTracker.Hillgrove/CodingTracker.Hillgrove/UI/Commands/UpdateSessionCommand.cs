@@ -7,10 +7,10 @@ namespace CodingTracker.Hillgrove.UI.Commands;
 
 internal class UpdateSessionCommand : IMenuCommand
 {
-    private readonly CodingSessionController _controller;
+    private readonly ICodingSessionController _controller;
     public string Label => "Update a session";
 
-    internal UpdateSessionCommand(CodingSessionController controller)
+    internal UpdateSessionCommand(ICodingSessionController controller)
     {
         _controller = controller;
     }
