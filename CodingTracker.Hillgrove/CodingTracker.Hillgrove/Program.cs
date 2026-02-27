@@ -30,6 +30,9 @@ catch (Exception ex)
     return;
 }
 
+Console.WriteLine("\nPress any key to continue...");
+Console.ReadKey(intercept: true);
+
 var menu = provider.GetRequiredService<ConsoleMenu>();
 await menu.RunAsync();
 
