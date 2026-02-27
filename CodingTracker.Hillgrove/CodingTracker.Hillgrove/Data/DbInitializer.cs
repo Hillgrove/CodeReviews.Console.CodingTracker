@@ -4,18 +4,25 @@ using Microsoft.Data.Sqlite;
 
 namespace CodingTracker.Hillgrove.Data;
 
-internal static class DbInitializer
+internal class DbInitializer : IDbInitializer
 {
-    public static void CreateDatabase(IDbConnection connection)
+    private readonly IDbConnection _dbConnection;
+
+    public DbInitializer(IDbConnection dbConnection)
     {
-        EnsureDatabaseExists(connection);
-        EnsureTableExists(connection);
+        _dbConnection = dbConnection;
     }
 
-    public static void SeedDatabase(IDbConnection connection)
+    public void CreateDatabase()
+    {
+        EnsureDatabaseExists();
+        EnsureTableExists();
+    }
+
+    public void SeedDatabase()
     {
         var sql = $"SELECT EXISTS(SELECT 1 FROM [coding_sessions])";
-        var isEmpty = !connection.QuerySingle<bool>(sql);
+        var isEmpty = !_dbConnection.QuerySingle<bool>(sql);
 
         if (isEmpty)
         {
@@ -127,16 +134,16 @@ internal static class DbInitializer
             sql =
                 $"INSERT INTO [coding_sessions] (TimeStart, TimeEnd) VALUES (@TimeStart, @TimeEnd)";
 
-            int addedSessions = connection.Execute(sql, sessions);
+            int addedSessions = _dbConnection.Execute(sql, sessions);
 
             Console.WriteLine($"Database seeded with {addedSessions} session samples");
         }
     }
 
-    private static void EnsureDatabaseExists(IDbConnection connection)
+    private void EnsureDatabaseExists()
     {
         var builder = new SqliteConnectionStringBuilder(
-            ((SqliteConnection)connection).ConnectionString
+            ((SqliteConnection)_dbConnection).ConnectionString
         );
         var dbFile = builder.DataSource;
 
@@ -154,14 +161,14 @@ internal static class DbInitializer
         }
     }
 
-    private static void EnsureTableExists(IDbConnection connection)
+    private void EnsureTableExists()
     {
         Console.WriteLine($"Checking for table: 'coding_sessions'");
 
         var tableCheckSql =
             $"SELECT name FROM sqlite_master WHERE type='table' AND name='coding_sessions';";
 
-        var foundTable = connection.ExecuteScalar<string>(tableCheckSql);
+        var foundTable = _dbConnection.ExecuteScalar<string>(tableCheckSql);
         if (string.IsNullOrEmpty(foundTable))
         {
             Console.WriteLine($"Table 'coding_sessions' not found. Creating table...");
@@ -179,6 +186,6 @@ internal static class DbInitializer
                 TimeEnd TEXT NOT NULL
             );
         ";
-        connection.Execute(sql);
+        _dbConnection.Execute(sql);
     }
 }

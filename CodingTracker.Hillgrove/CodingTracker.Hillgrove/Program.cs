@@ -20,6 +20,7 @@ var services = new ServiceCollection();
 
 services.AddSingleton<IConfiguration>(config);
 services.AddSingleton<IDbConnection>(_ => new SqliteConnection(connectionString));
+services.AddSingleton<IDbInitializer, DbInitializer>();
 services.AddSingleton<ICodingSessionRepository>(sp => new CodingSessionRepository(
     sp.GetRequiredService<IDbConnection>()
 ));
@@ -34,11 +35,11 @@ services.AddSingleton<ConsoleMenu>();
 
 using var provider = services.BuildServiceProvider();
 
-var connection = provider.GetRequiredService<IDbConnection>();
+var dbInitializer = provider.GetRequiredService<IDbInitializer>();
 try
 {
-    DbInitializer.CreateDatabase(connection);
-    DbInitializer.SeedDatabase(connection);
+    dbInitializer.CreateDatabase();
+    dbInitializer.SeedDatabase();
 }
 catch (Exception ex)
 {
