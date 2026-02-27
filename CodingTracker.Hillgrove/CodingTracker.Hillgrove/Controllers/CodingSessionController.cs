@@ -1,7 +1,7 @@
-namespace CodingTracker.Hillgrove.Controllers;
-
 using CodingTracker.Hillgrove.Data;
 using CodingTracker.Hillgrove.Models;
+
+namespace CodingTracker.Hillgrove.Controllers;
 
 internal class CodingSessionController : ICodingSessionController
 {
