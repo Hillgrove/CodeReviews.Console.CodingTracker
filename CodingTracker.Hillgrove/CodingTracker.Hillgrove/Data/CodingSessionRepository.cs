@@ -23,7 +23,7 @@ internal class CodingSessionRepository : ICodingSessionRepository
     public async Task<IEnumerable<CodingSession>> GetAllAsync()
     {
         var sql = "SELECT Id, TimeStart, TimeEnd FROM [coding_sessions]";
-        var rows = await _dbConnection.QueryAsync<CodingSessionDTO>(sql);
+        var rows = await _dbConnection.QueryAsync<CodingSessionDto>(sql);
         var sessions = rows.Select(s => new CodingSession(s.Id, s.TimeStart, s.TimeEnd));
 
         return sessions;
@@ -56,14 +56,14 @@ internal class CodingSessionRepository : ICodingSessionRepository
                 $"SELECT Id, TimeStart, TimeEnd FROM [coding_sessions] ORDER BY TimeStart {orderDir}";
         }
 
-        var rows = await _dbConnection.QueryAsync<CodingSessionDTO>(sql, parameters);
+        var rows = await _dbConnection.QueryAsync<CodingSessionDto>(sql, parameters);
         return rows.Select(s => new CodingSession(s.Id, s.TimeStart, s.TimeEnd));
     }
 
     public async Task<CodingSession?> GetByIdAsync(long id)
     {
         var sql = "SELECT Id, TimeStart, TimeEnd FROM [coding_sessions] WHERE Id = @Id";
-        var row = await _dbConnection.QuerySingleOrDefaultAsync<CodingSessionDTO>(
+        var row = await _dbConnection.QuerySingleOrDefaultAsync<CodingSessionDto>(
             sql,
             new { Id = id }
         );
