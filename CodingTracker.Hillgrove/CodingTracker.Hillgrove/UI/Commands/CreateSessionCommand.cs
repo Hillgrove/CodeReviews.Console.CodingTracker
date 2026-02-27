@@ -98,7 +98,6 @@ internal class CreateSessionCommand : IMenuCommand
             AnsiConsole.MarkupLine($"[yellow]Stopped after: {elapsed:hh\\:mm\\:ss}[/]");
             AnsiConsole.WriteLine();
 
-            // Flush eventuelle resterende tastetryk så de ikke forurener Confirm-prompten
             while (Console.KeyAvailable)
                 Console.ReadKey(true);
 
