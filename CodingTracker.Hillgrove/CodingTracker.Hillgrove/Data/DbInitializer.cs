@@ -6,15 +6,15 @@ namespace CodingTracker.Hillgrove.Data;
 
 internal static class DbInitializer
 {
-    public static void CreateDatabase(IDbConnection connection, string tableName)
+    public static void CreateDatabase(IDbConnection connection)
     {
         EnsureDatabaseExists(connection);
-        EnsureTableExists(connection, tableName);
+        EnsureTableExists(connection);
     }
 
-    public static void SeedDatabase(IDbConnection connection, string tableName)
+    public static void SeedDatabase(IDbConnection connection)
     {
-        var sql = $"SELECT EXISTS(SELECT 1 FROM [{tableName}])";
+        var sql = $"SELECT EXISTS(SELECT 1 FROM [coding_sessions])";
         var isEmpty = !connection.QuerySingle<bool>(sql);
 
         if (isEmpty)
@@ -124,7 +124,8 @@ internal static class DbInitializer
                 },
             };
 
-            sql = $"INSERT INTO [{tableName}] (TimeStart, TimeEnd) VALUES (@TimeStart, @TimeEnd)";
+            sql =
+                $"INSERT INTO [coding_sessions] (TimeStart, TimeEnd) VALUES (@TimeStart, @TimeEnd)";
 
             int addedSessions = connection.Execute(sql, sessions);
 
@@ -153,26 +154,26 @@ internal static class DbInitializer
         }
     }
 
-    private static void EnsureTableExists(IDbConnection connection, string tableName)
+    private static void EnsureTableExists(IDbConnection connection)
     {
-        Console.WriteLine($"Checking for table: {tableName}");
+        Console.WriteLine($"Checking for table: 'coding_sessions'");
 
         var tableCheckSql =
-            $"SELECT name FROM sqlite_master WHERE type='table' AND name='{tableName}';";
+            $"SELECT name FROM sqlite_master WHERE type='table' AND name='coding_sessions';";
 
         var foundTable = connection.ExecuteScalar<string>(tableCheckSql);
         if (string.IsNullOrEmpty(foundTable))
         {
-            Console.WriteLine($"Table '{tableName}' not found. Creating table...");
+            Console.WriteLine($"Table 'coding_sessions' not found. Creating table...");
         }
         else
         {
-            Console.WriteLine($"Table {tableName} found.");
+            Console.WriteLine($"Table 'coding_sessions' found.");
         }
 
         var sql =
             $@"
-            CREATE TABLE IF NOT EXISTS [{tableName}] (
+            CREATE TABLE IF NOT EXISTS [coding_sessions] (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                 TimeStart TEXT NOT NULL,
                 TimeEnd TEXT NOT NULL
