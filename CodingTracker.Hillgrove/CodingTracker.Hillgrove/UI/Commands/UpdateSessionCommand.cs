@@ -10,7 +10,7 @@ internal class UpdateSessionCommand : IMenuCommand
     private readonly ICodingSessionController _controller;
     public string Label => "Update a session";
 
-    internal UpdateSessionCommand(ICodingSessionController controller)
+    public UpdateSessionCommand(ICodingSessionController controller)
     {
         _controller = controller;
     }

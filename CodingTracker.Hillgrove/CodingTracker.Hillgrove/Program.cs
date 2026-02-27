@@ -2,6 +2,7 @@
 using CodingTracker.Hillgrove.Controllers;
 using CodingTracker.Hillgrove.Data;
 using CodingTracker.Hillgrove.UI;
+using CodingTracker.Hillgrove.UI.Commands;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +24,12 @@ services.AddSingleton<ICodingSessionRepository>(sp => new CodingSessionRepositor
     sp.GetRequiredService<IDbConnection>()
 ));
 services.AddSingleton<ICodingSessionController, CodingSessionController>();
+services.AddSingleton<AppState>();
+services.AddSingleton<IMenuCommand, CreateSessionCommand>();
+services.AddSingleton<IMenuCommand, ViewSessionsCommand>();
+services.AddSingleton<IMenuCommand, UpdateSessionCommand>();
+services.AddSingleton<IMenuCommand, DeleteSessionCommand>();
+services.AddSingleton<IMenuCommand, ExitCommand>();
 services.AddSingleton<ConsoleMenu>();
 
 using var provider = services.BuildServiceProvider();

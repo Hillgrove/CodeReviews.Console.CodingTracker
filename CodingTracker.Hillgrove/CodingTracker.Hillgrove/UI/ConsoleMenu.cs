@@ -1,39 +1,29 @@
 namespace CodingTracker.Hillgrove.UI;
 
-using CodingTracker.Hillgrove.Controllers;
 using CodingTracker.Hillgrove.UI.Commands;
 using Spectre.Console;
 
 internal class ConsoleMenu
 {
-    private readonly ICodingSessionController _controller;
+    private readonly IEnumerable<IMenuCommand> _commands;
+    private readonly AppState _appState;
 
-    public ConsoleMenu(ICodingSessionController controller)
+    public ConsoleMenu(IEnumerable<IMenuCommand> commands, AppState appState)
     {
-        _controller = controller;
+        _commands = commands;
+        _appState = appState;
     }
-
-    private bool _keepRunning = true;
 
     public async Task RunAsync()
     {
-        var commands = new List<IMenuCommand>
-        {
-            new CreateSessionCommand(_controller),
-            new ViewSessionsCommand(_controller),
-            new UpdateSessionCommand(_controller),
-            new DeleteSessionCommand(_controller),
-            new ExitCommand(() => _keepRunning = false),
-        };
-
-        while (_keepRunning)
+        while (_appState.IsRunning)
         {
             AnsiConsole.Clear();
 
             IMenuCommand choice = AnsiConsole.Prompt(
                 new SelectionPrompt<IMenuCommand>()
                     .Title("Coding Tracker")
-                    .AddChoices(commands)
+                    .AddChoices(_commands)
                     .UseConverter(c => c.Label)
             );
 

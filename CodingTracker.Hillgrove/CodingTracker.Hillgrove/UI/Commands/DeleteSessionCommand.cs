@@ -10,7 +10,7 @@ internal class DeleteSessionCommand : IMenuCommand
     private readonly ICodingSessionController _controller;
     public string Label => "Delete a session";
 
-    internal DeleteSessionCommand(ICodingSessionController controller)
+    public DeleteSessionCommand(ICodingSessionController controller)
     {
         _controller = controller;
     }

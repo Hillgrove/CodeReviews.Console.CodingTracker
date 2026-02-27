@@ -9,7 +9,7 @@ internal class ViewSessionsCommand : IMenuCommand
     private readonly ICodingSessionController _controller;
     public string Label => "View sessions";
 
-    internal ViewSessionsCommand(ICodingSessionController controller)
+    public ViewSessionsCommand(ICodingSessionController controller)
     {
         _controller = controller;
     }

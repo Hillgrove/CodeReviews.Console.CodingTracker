@@ -5,17 +5,17 @@ namespace CodingTracker.Hillgrove.UI.Commands;
 internal class ExitCommand : IMenuCommand
 {
     public string Label => "Exit the app";
-    private readonly Action _onExit;
+    private readonly AppState _appState;
 
-    internal ExitCommand(Action onExit)
+    public ExitCommand(AppState appState)
     {
-        _onExit = onExit;
+        _appState = appState;
     }
 
     public Task ExecuteAsync()
     {
         AnsiConsole.WriteLine("Exiting the app.");
-        _onExit();
+        _appState.IsRunning = false;
         return Task.CompletedTask;
     }
 }

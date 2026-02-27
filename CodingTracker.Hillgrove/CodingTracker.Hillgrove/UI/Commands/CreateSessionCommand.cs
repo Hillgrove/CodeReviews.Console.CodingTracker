@@ -11,7 +11,7 @@ internal class CreateSessionCommand : IMenuCommand
     private readonly ICodingSessionController _controller;
     public string Label => "Register a new session";
 
-    internal CreateSessionCommand(ICodingSessionController controller)
+    public CreateSessionCommand(ICodingSessionController controller)
     {
         _controller = controller;
     }
