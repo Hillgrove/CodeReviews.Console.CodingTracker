@@ -10,25 +10,25 @@ internal class DateTimeInput
         DateTime date = default;
         DateTime dateAndTime = default;
 
-        string? error;
+        bool isValid;
         do
         {
             date = DatePicker($"insert {text} date (yyyy-MM-dd): ");
 
-            error = Validation.ValidateDate(date);
-            if (error != null)
-                AnsiConsole.MarkupLine($"[red]{error}[/]");
-        } while (error != null);
+            isValid = Validation.ValidateDate(date);
+            if (!isValid)
+                AnsiConsole.MarkupLine($"[red]Only present and past dates allowed...[/]");
+        } while (!isValid);
 
         do
         {
             TimeOnly time = TimePicker($"Insert {text} time (HH:mm): ");
             dateAndTime = CombineDateAndTime(date, time);
 
-            error = Validation.ValidateTime(dateAndTime);
-            if (error != null)
-                AnsiConsole.MarkupLine($"[red]{error}[/]");
-        } while (error != null);
+            isValid = Validation.ValidateTime(dateAndTime);
+            if (!isValid)
+                AnsiConsole.MarkupLine($"[red]Only present and past times allowed...[/]");
+        } while (!isValid);
 
         AnsiConsole.MarkupLine($"[green]{text} time set to: {dateAndTime:yyyy-MM-dd HH:mm}[/]");
         return dateAndTime;

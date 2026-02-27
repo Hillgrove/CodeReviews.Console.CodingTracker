@@ -7,7 +7,7 @@ public class ValidationTests
     // --- ValidateDate ---
 
     [Fact]
-    public void GivenTodaysDate_WhenValidatingDate_ThenReturnsNull()
+    public void GivenTodaysDate_WhenValidatingDate_ThenReturnsTrue()
     {
         // Arrange
         var today = DateTime.Now.Date;
@@ -16,11 +16,11 @@ public class ValidationTests
         var result = Validation.ValidateDate(today);
 
         // Assert
-        Assert.Null(result);
+        Assert.True(result);
     }
 
     [Fact]
-    public void GivenPastDate_WhenValidatingDate_ThenReturnsNull()
+    public void GivenPastDate_WhenValidatingDate_ThenReturnsTrue()
     {
         // Arrange
         var pastDate = DateTime.Now.AddDays(-7).Date;
@@ -29,11 +29,11 @@ public class ValidationTests
         var result = Validation.ValidateDate(pastDate);
 
         // Assert
-        Assert.Null(result);
+        Assert.True(result);
     }
 
     [Fact]
-    public void GivenFutureDate_WhenValidatingDate_ThenReturnsErrorMessage()
+    public void GivenFutureDate_WhenValidatingDate_ThenReturnsFalse()
     {
         // Arrange
         var futureDate = DateTime.Now.AddDays(1).Date;
@@ -42,14 +42,13 @@ public class ValidationTests
         var result = Validation.ValidateDate(futureDate);
 
         // Assert
-        Assert.NotNull(result);
-        Assert.Equal("Only present and past dates allowed...", result);
+        Assert.False(result);
     }
 
     // --- ValidateTime ---
 
     [Fact]
-    public void GivenCurrentTime_WhenValidatingTime_ThenReturnsNull()
+    public void GivenCurrentTime_WhenValidatingTime_ThenReturnsTrue()
     {
         // Arrange
         var now = DateTime.Now.AddSeconds(-1);
@@ -58,11 +57,11 @@ public class ValidationTests
         var result = Validation.ValidateTime(now);
 
         // Assert
-        Assert.Null(result);
+        Assert.True(result);
     }
 
     [Fact]
-    public void GivenPastTime_WhenValidatingTime_ThenReturnsNull()
+    public void GivenPastTime_WhenValidatingTime_ThenReturnsTrue()
     {
         // Arrange
         var pastTime = DateTime.Now.AddHours(-3);
@@ -71,11 +70,11 @@ public class ValidationTests
         var result = Validation.ValidateTime(pastTime);
 
         // Assert
-        Assert.Null(result);
+        Assert.True(result);
     }
 
     [Fact]
-    public void GivenFutureTime_WhenValidatingTime_ThenReturnsErrorMessage()
+    public void GivenFutureTime_WhenValidatingTime_ThenReturnsFalse()
     {
         // Arrange
         var futureTime = DateTime.Now.AddHours(1);
@@ -84,7 +83,6 @@ public class ValidationTests
         var result = Validation.ValidateTime(futureTime);
 
         // Assert
-        Assert.NotNull(result);
-        Assert.Equal("Only present and past times allowed...", result);
+        Assert.False(result);
     }
 }
