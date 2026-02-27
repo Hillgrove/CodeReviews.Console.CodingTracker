@@ -16,24 +16,7 @@ string connectionString =
     config.GetConnectionString("Default")
     ?? throw new InvalidOperationException("Connection string is missing in appsettings.json");
 
-var services = new ServiceCollection();
-
-services.AddSingleton<IConfiguration>(config);
-services.AddSingleton<IDbConnection>(_ => new SqliteConnection(connectionString));
-services.AddSingleton<IDbInitializer, DbInitializer>();
-services.AddSingleton<ICodingSessionRepository>(sp => new CodingSessionRepository(
-    sp.GetRequiredService<IDbConnection>()
-));
-services.AddSingleton<ICodingSessionController, CodingSessionController>();
-services.AddSingleton<AppState>();
-services.AddSingleton<IMenuCommand, CreateSessionCommand>();
-services.AddSingleton<IMenuCommand, ViewSessionsCommand>();
-services.AddSingleton<IMenuCommand, UpdateSessionCommand>();
-services.AddSingleton<IMenuCommand, DeleteSessionCommand>();
-services.AddSingleton<IMenuCommand, ExitCommand>();
-services.AddSingleton<ConsoleMenu>();
-
-using var provider = services.BuildServiceProvider();
+using var provider = BuildServiceProvider(config, connectionString);
 
 var dbInitializer = provider.GetRequiredService<IDbInitializer>();
 try
@@ -52,3 +35,28 @@ await menu.RunAsync();
 
 Console.Write("Press any key to continue...");
 Console.ReadKey();
+
+static ServiceProvider BuildServiceProvider(IConfiguration config, string connectionString)
+{
+    var services = new ServiceCollection();
+
+    services.AddSingleton<IConfiguration>(config);
+    services.AddTransient<IDbConnection>(_ => new SqliteConnection(connectionString));
+
+    services.AddTransient<IDbInitializer, DbInitializer>();
+    services.AddTransient<ICodingSessionRepository, CodingSessionRepository>();
+
+    services.AddTransient<ICodingSessionController, CodingSessionController>();
+
+    services.AddSingleton<AppState>();
+    services.AddTransient<IMenuCommand, CreateSessionCommand>();
+    services.AddTransient<IMenuCommand, ViewSessionsCommand>();
+    services.AddTransient<IMenuCommand, UpdateSessionCommand>();
+    services.AddTransient<IMenuCommand, DeleteSessionCommand>();
+    services.AddTransient<IMenuCommand, ExitCommand>();
+    services.AddTransient<ConsoleMenu>();
+
+    return services.BuildServiceProvider(
+        new ServiceProviderOptions { ValidateOnBuild = true, ValidateScopes = true }
+    );
+}
